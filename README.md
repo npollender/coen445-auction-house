@@ -1,9 +1,8 @@
 ## COEN445 - Communication Networks &amp; Protocols Project
+### Auction System
 
-Team members:
-
-[Liyuan Zhang](https://github.com/Swallow666)
-
+Team members:   
+[Liyuan Zhang](https://github.com/Swallow666)    
 [Nicolas Pollender](https://github.com/npollender)
 
 ------
