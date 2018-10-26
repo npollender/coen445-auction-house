@@ -1,10 +1,10 @@
 ## COEN445 - Communication Networks &amp; Protocols Project
 Team members:
-[Liyuan Zhang]
+[Liyuan Zhang] (https://github.com/Swallow666)
 [Nicolas Pollender]
 
 ------
-###### :fire: DUE FUCKING DATE :fire:
+###### :fire: DUE DATE :fire:
 Week 13 perhaps
 - [ ] Registering with AS
 - [ ] Offering items for auction
