@@ -1,7 +1,10 @@
 ## COEN445 - Communication Networks &amp; Protocols Project
+
 Team members:
-[Liyuan Zhang] (https://github.com/Swallow666)
-[Nicolas Pollender]
+
+[Liyuan Zhang](https://github.com/Swallow666)
+
+[Nicolas Pollender](https://github.com/npollender)
 
 ------
 ###### :fire: DUE DATE :fire:
