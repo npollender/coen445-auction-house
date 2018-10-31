@@ -32,25 +32,25 @@ public class Configuration {
                     try
                     {
                         System.out.println("Port " + port_split[1]);
-                        SendHelper.PORT = new Integer(port_split[1]);
+                        DefaultHelper.PORT = new Integer(port_split[1]);
                     }
                     catch (Exception e) {
-                        SendHelper.PORT = 42069;}
+                        DefaultHelper.PORT = 42069;}
                 }
                 else
-                    SendHelper.PORT = 42069;
+                    DefaultHelper.PORT = 42069;
 
                 s = bufferedReader.readLine();
                 String server_split[] = s.split(" ");
                 if (server_split.length >= 1) {
                     try {
-                        SendHelper.SERVER = server_split[1];
+                        DefaultHelper.SERVER = server_split[1];
                     } catch (Exception e) {
-                        SendHelper.SERVER = "";
+                        DefaultHelper.SERVER = "";
                     }
                 }
                 else
-                    SendHelper.SERVER = "";
+                    DefaultHelper.SERVER = "";
 
                 dataStream.close();
             }

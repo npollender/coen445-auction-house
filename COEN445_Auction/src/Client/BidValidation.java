@@ -27,7 +27,10 @@ public class BidValidation extends Thread{
              * A successful bid is determined in ItemsValidation.java
              */
             case 0:
-            {}
+            {
+                System.out.println("Bid failed.");
+                break;
+            }
         }
     }
 }

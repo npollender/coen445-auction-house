@@ -9,7 +9,7 @@ public class Action implements Runnable {
 
     static private String USERNAME, SERVER, REQUEST, IP;
     static private int PORT;
-    static int SEL;
+    static int CODE;
     static int REGISTER = 0;
     static int DEREG = 1;
     static int OFFER = 2;
@@ -17,12 +17,12 @@ public class Action implements Runnable {
 
     public Action(int ID)
     {
-        SEL = ID;
+        CODE = ID;
     }
 
     public void run()
     {
-        switch(SEL)
+        switch(CODE)
         {
             /**
              * Case 0 starts a thread for registration.

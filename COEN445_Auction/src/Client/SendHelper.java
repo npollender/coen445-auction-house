@@ -24,9 +24,6 @@ public class SendHelper {
     static public Lock READ_LIST = RW_ITEM_LOCK.readLock();
     static public Lock WRITE_LIST = RW_ITEM_LOCK.writeLock();
 
-    static int PORT;
-    static String SERVER;
-
     static char P = '_';
 
     public SendHelper() {}

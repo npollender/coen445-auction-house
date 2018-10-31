@@ -28,6 +28,10 @@ public class Items {
         MIN = new Float(s);
     }
 
+    /**
+     * We'll need the 'get' methods to access the items information if a user asks for item details.
+     */
+
     public int get_id()
     {
         return ITEM_ID;

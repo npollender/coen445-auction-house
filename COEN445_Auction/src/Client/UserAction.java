@@ -14,6 +14,10 @@ public class UserAction extends Thread {
     static String IP = Client.IP;
     static int PORT = Client.PORT;
 
+    /**
+     * Moved all 4 actions into a single class. Less clutter in the code, easier to access everything.
+     */
+
     public UserAction(int code)
     {
         CODE = code;
@@ -42,28 +46,33 @@ public class UserAction extends Thread {
         tmp_items = (Items) Client.ITEMS.get(Integer.parseInt(NAME));
         int id = tmp_items.get_id();
 
-        if (CODE == 0)
+        switch(CODE)
         {
-            msg = SendHelper.create_send_reg(CODE, REQUEST, C_NAME, IP, PORT);
-            SendHelper.send(msg);
-            TimerHelper.time_start(msg);
+            case 0:
+            {
+                msg = SendHelper.create_send_reg(CODE, REQUEST, C_NAME, IP, PORT);
+                SendHelper.send(msg);
+                TimerHelper.time_start(msg);
+                break;
+            }
+            case 1:
+            {
+                msg = SendHelper.create_send_reg(CODE, REQUEST, C_NAME, IP, PORT);
+                SendHelper.send(msg);
+                break;
+            }
+            case 2:
+            {
+                msg = SendHelper.create_send_offer(CODE, REQUEST, C_NAME, NAME, DESC, MIN);
+                SendHelper.send(msg);
+                break;
+            }
+            case 3:
+            {
+                msg = SendHelper.create_send_bid(CODE, REQUEST, C_NAME, id, BID);
+                SendHelper.send(msg);
+                break;
+            }
         }
-        else if (CODE == 1)
-        {
-            msg = SendHelper.create_send_reg(CODE, REQUEST, C_NAME, IP, PORT);
-            SendHelper.send(msg);
-        }
-        else if (CODE == 2)
-        {
-            msg = SendHelper.create_send_offer(CODE, REQUEST, C_NAME, NAME, DESC, MIN);
-            SendHelper.send(msg);
-        }
-        else if (CODE == 3)
-        {
-            msg = SendHelper.create_send_bid(CODE, REQUEST, C_NAME, id, BID);
-            SendHelper.send(msg);
-        }
-        else
-            System.out.println("Something went wrong.");
     }
 }
