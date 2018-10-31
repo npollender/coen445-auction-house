@@ -31,9 +31,21 @@ public class SendHelper {
 
     public SendHelper() {}
 
-    synchronized static String create_send(char c, String request, String name, String ip, int port)
+    synchronized static String create_send_reg(int c, String request, String name, String ip, int port)
     {
         String msg = c + P + request + P + name + P + ip + P + port;
+        return msg;
+    }
+
+    synchronized static String create_send_offer(int c, String request, String name, String i_name, String i_desc, String min)
+    {
+        String msg = c + P + request + P + name + P + i_name + P + i_desc + P + min;
+        return msg;
+    }
+
+    synchronized static String create_send_bid(int c, String request, String name, int id, String bid)
+    {
+        String msg = c + P + request + P + name + P + id + P + bid;
         return msg;
     }
 

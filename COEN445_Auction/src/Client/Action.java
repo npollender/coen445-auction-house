@@ -10,6 +10,10 @@ public class Action implements Runnable {
     static private String USERNAME, SERVER, REQUEST, IP;
     static private int PORT;
     static int SEL;
+    static int REGISTER = 0;
+    static int DEREG = 1;
+    static int OFFER = 2;
+    static int BID = 3;
 
     public Action(int ID)
     {
@@ -24,25 +28,25 @@ public class Action implements Runnable {
              * Case 0 starts a thread for registration.
              */
             case 0:
-                new Register().start();
+                new UserAction(REGISTER).start();
             break;
             /**
              * Case 1 starts a thread for de-registration.
              */
             case 1:
-                new Deregister().start();
+                new UserAction(DEREG).start();
             break;
             /**
              * Case 2 starts a thread for a new item offered.
              */
             case 2:
-                new OfferItems(Client.DESC, Client.MIN, Client.NAME).start();
+                new UserAction(OFFER, Client.DESC, Client.MIN, Client.NAME).start();
             break;
             /**
              * Case 3 starts a thread for bidding on an item.
              */
             case 3:
-                new BidOnItems(Client.ITEM, Client.BID).start();
+                new UserAction(BID, Client.ITEM, Client.BID).start();
             break;
         }
     }
