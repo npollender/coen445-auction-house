@@ -7,13 +7,7 @@ package Client;
 
 public class Action implements Runnable {
 
-    static private String USERNAME, SERVER, REQUEST, IP;
-    static private int PORT;
     static int CODE;
-    static int REGISTER = 0;
-    static int DEREG = 1;
-    static int OFFER = 2;
-    static int BID = 3;
 
     public Action(int ID)
     {
@@ -28,25 +22,25 @@ public class Action implements Runnable {
              * Case 0 starts a thread for registration.
              */
             case 0:
-                new UserAction(REGISTER).start();
+                new UserAction(DefaultHelper.REGISTER).start();
             break;
             /**
              * Case 1 starts a thread for de-registration.
              */
             case 1:
-                new UserAction(DEREG).start();
+                new UserAction(DefaultHelper.DEREG).start();
             break;
             /**
              * Case 2 starts a thread for a new item offered.
              */
             case 2:
-                new UserAction(OFFER, Client.DESC, Client.MIN, Client.NAME).start();
+                new UserAction(DefaultHelper.OFFER, Client.DESC, Client.MIN, Client.NAME).start();
             break;
             /**
              * Case 3 starts a thread for bidding on an item.
              */
             case 3:
-                new UserAction(BID, Client.ITEM, Client.BID).start();
+                new UserAction(DefaultHelper.BID, Client.ITEM, Client.BID).start();
             break;
         }
     }

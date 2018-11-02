@@ -12,6 +12,7 @@ public class UserAction extends Thread {
     static String REQUEST = Client.REQUEST;
     static String C_NAME = Client.NAME;
     static String IP = Client.IP;
+    static int ID = Client.ID;
     static int PORT = Client.PORT;
 
     /**
@@ -42,9 +43,6 @@ public class UserAction extends Thread {
     public void run()
     {
         String msg;
-        Items tmp_items = new Items();
-        tmp_items = (Items) Client.ITEMS.get(Integer.parseInt(NAME));
-        int id = tmp_items.get_id();
 
         switch(CODE)
         {
@@ -57,7 +55,7 @@ public class UserAction extends Thread {
             }
             case 1:
             {
-                msg = SendHelper.create_send_reg(CODE, REQUEST, C_NAME, IP, PORT);
+                msg = SendHelper.create_send_dereg(CODE, REQUEST, C_NAME, IP);
                 SendHelper.send(msg);
                 break;
             }
@@ -69,7 +67,7 @@ public class UserAction extends Thread {
             }
             case 3:
             {
-                msg = SendHelper.create_send_bid(CODE, REQUEST, C_NAME, id, BID);
+                msg = SendHelper.create_send_bid(CODE, REQUEST, ID, BID);
                 SendHelper.send(msg);
                 break;
             }

@@ -5,7 +5,6 @@
 
 package Client;
 
-import java.io.Console;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -15,11 +14,12 @@ import java.util.Scanner;
 
 public class Client {
 
-    static int PORT, CODE;
+    static int PORT, CODE, ID;
     static InetAddress SERVER_ADDRESS, IP_ADDRESS;
     static DatagramSocket SOCKET;
+    static DatagramPacket PACKET;
     static String SERVER, NAME, REQUEST, IP, DESC, MIN, ITEM, ITEM_NAME, BID;
-    static ArrayList ITEMS = new ArrayList<Items>();
+    //static ArrayList<Items> ITEMS = new ArrayList<Items>();
     static boolean IS_REGISTERED;
     static boolean EXIT = false;
 
@@ -103,10 +103,19 @@ public class Client {
         }
     }
 
+    public void joke()
+    {
+        System.out.println("A programming language walks into a bar and says 'Hello world!'");
+    }
+
+    public void addFunds()
+    {
+        System.out.println("Adding funds...");
+        System.out.println("You have successfully mortgaged your home! You now have a bunch of imaginary money!");
+    }
+
     public static void main(String args[]) throws IOException
     {
-        Configuration CONFIG = new Configuration();
-        CONFIG.write_file();
         PORT = DefaultHelper.PORT;
         SERVER = DefaultHelper.SERVER;
         SOCKET = new DatagramSocket(PORT);
@@ -120,10 +129,18 @@ public class Client {
         Thread listen = new Thread(() -> {
             while (true)
             {
-                System.out.println("Listening Thread Working");
+                /**System.out.println("Listening Thread Working");
                 try{
                     Thread.sleep(10000);
-                } catch (InterruptedException e) {Thread.currentThread().interrupt();}
+                } catch (InterruptedException e) {Thread.currentThread().interrupt();}*/
+                try
+                {
+                    byte[] rec_data = new byte[DefaultHelper.MSG_SIZE];
+                    PACKET = new DatagramPacket(rec_data, rec_data.length);
+                    SOCKET.receive(PACKET);
+                    new Thread(new DataValidation(PACKET, SOCKET)).start();
+                }
+                catch (IOException e) {}
             }
         });
 
@@ -131,10 +148,8 @@ public class Client {
 
         while (!EXIT)
         {
-            System.out.print("Hello " + command);
-            command = input.nextLine();
-            if (command.equals("stop"))
-                break;
+            System.out.print("Enter a command: ");
+
         }
 
         listen.stop();

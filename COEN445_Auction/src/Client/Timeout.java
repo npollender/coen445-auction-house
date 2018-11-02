@@ -9,7 +9,7 @@ import java.util.TimerTask;
 
 public class Timeout extends TimerTask {
 
-    String MSG;
+    static String MSG;
 
     public Timeout(String s)
     {

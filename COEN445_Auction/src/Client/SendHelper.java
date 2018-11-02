@@ -18,40 +18,58 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SendHelper {
 
-    static public final int MSG_SIZE = 300;
+    static public byte[] MESSAGE = new byte[DefaultHelper.MSG_SIZE];
 
     static final private ReentrantReadWriteLock RW_ITEM_LOCK = new ReentrantReadWriteLock();
     static public Lock READ_LIST = RW_ITEM_LOCK.readLock();
     static public Lock WRITE_LIST = RW_ITEM_LOCK.writeLock();
 
-    static char P = '_';
+    static char P = '/';
 
     public SendHelper() {}
 
+    /**
+     * Register request to the server
+     */
     synchronized static String create_send_reg(int c, String request, String name, String ip, int port)
     {
         String msg = c + P + request + P + name + P + ip + P + port;
         return msg;
     }
 
-    synchronized static String create_send_offer(int c, String request, String name, String i_name, String i_desc, String min)
+    /**
+     * De-register request to the server
+     */
+    synchronized static String create_send_dereg(int c, String request, String name, String ip)
     {
-        String msg = c + P + request + P + name + P + i_name + P + i_desc + P + min;
+        String msg = c + P + request + P + name + P + ip;
         return msg;
     }
 
-    synchronized static String create_send_bid(int c, String request, String name, int id, String bid)
+    /**
+     * Offer request to the server
+     */
+    synchronized static String create_send_offer(int c, String request, String name, String ip, String i_desc, String min)
     {
-        String msg = c + P + request + P + name + P + id + P + bid;
+        String msg = c + P + request + P + name + P + ip + P + i_desc + P + min;
+        return msg;
+    }
+
+    /**
+     * Bid request to the server
+     * TCP CONNECTION
+     */
+    synchronized static String create_send_bid(int c, String request, int id, String bid)
+    {
+        String msg = c + P + request + P + id + P + bid;
         return msg;
     }
 
     synchronized static void send(String data)
     {
         try {
-            byte[] msg = new byte[MSG_SIZE];
-            msg = data.getBytes();
-            DatagramPacket packet = new DatagramPacket(msg, msg.length, Client.SERVER_ADDRESS, Client.PORT);
+            MESSAGE = data.getBytes();
+            DatagramPacket packet = new DatagramPacket(MESSAGE, MESSAGE.length, Client.SERVER_ADDRESS, Client.PORT);
             Client.SOCKET.send(packet);
         }
         catch (IOException e) {}

@@ -7,12 +7,13 @@ package Client;
 
 public class OfferValidation extends Thread {
 
-    static String[] INFO;
+    static String REQUEST = Client.REQUEST;
+    static String[] DATA;
     static int CODE;
 
-    public OfferValidation(String[] info, int code)
+    public OfferValidation(int code, String[] data)
     {
-        INFO = info;
+        DATA = data;
         CODE = code;
     }
 
@@ -23,26 +24,38 @@ public class OfferValidation extends Thread {
         {
             /**
              * Case 0 is when we have an item offered successfully.
-             * However, the item won't be added if it already exists.
+             * The item is added to the client using the data.
+             * Like always, we check the request before proceeding.
              */
             case 0:
             {
-                //if check correct info
-                System.out.println("Item offered successfully.");
-
-                //create temporary item list to push
-                //check for duplicate
-                //add new item
+                if (DATA[1].equals(REQUEST))
+                {
+                    System.out.println("Your item has been offered.");
+                }
                 break;
             }
             /**
-             * Case 1 is when we have an unsuccessful offer. This should only happen if you
-             * are not registered, or if invalid info is provided.
+             * Case 1 is when we have an unsuccessful offer.
+             * The client will be given the reason why.
              */
             case 1:
             {
-                //if check correct info
-                System.out.println("Item offer failed.");
+                if (DATA[1].equals(REQUEST))
+                {
+                    /**
+                     * Two reasons why offers fail.
+                     * Wrong info provided, or user is not registered.
+                     */
+                    if (DATA[2].equals(DefaultHelper.OFFER_FAILED_0))
+                    {
+                        System.out.println("Offer failed, wrong information provided.");
+                    }
+                    if (DATA[2].equals(DefaultHelper.OFFER_FAILED_1))
+                    {
+                        System.out.println("Offer failed, you are not registered.");
+                    }
+                }
                 break;
             }
         }

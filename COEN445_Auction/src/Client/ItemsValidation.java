@@ -7,12 +7,12 @@ package Client;
 
 public class ItemsValidation extends Thread {
 
-    String[] INFO;
-    int CODE;
+    static String[] DATA;
+    static int CODE;
 
-    public ItemsValidation(String[] info, int code)
+    public ItemsValidation(int code, String[] data)
     {
-        INFO = info;
+        DATA = data;
         CODE = code;
     }
 
@@ -22,67 +22,55 @@ public class ItemsValidation extends Thread {
         switch(CODE)
         {
             /**
-             * Case 0 is when an item is added to the item list.
+             * Case 0 is when an item is added to the auction.
+             * The client is notified of the new item.
              */
             case 0:
             {
-                //check for dupes
-                //add item to list
-                //if dupe, do nothing
+                System.out.println("New item added to the auction!");
+                System.out.println("ID: " + DATA[1] + " - Description: " + DATA[2]);
                 break;
             }
             /**
              * Case 1 is when an existing item has its price updated.
+             * The client is notified of the new high bid.
              */
             case 1:
             {
-                Items tmp_items = new Items();
-                for (int i = 0; i < Client.ITEMS.size(); i++)
-                {
-                    tmp_items = (Items) Client.ITEMS.get(i);
-                    //if info is correct...
-                    //remove old item price, add new item price.
-                }
-                break;
+                System.out.println("New highest bid of " + DATA[2] + "$ on item #" + DATA[1]);
             }
             /**
              * Case 2 is when an item is won.
+             * The client that won the item receives this message.
              */
             case 2:
             {
-                System.out.println("You won an item!");
-                //should probably get the item name and include in the msg
+                System.out.println("Congratulations, you won item #" + DATA[1] + " for " + DATA[5] + "$.");
             }
             /**
-             * Case 3 is when an item is sold to another user.
+             * Case 3 is when the bidding period for an item you bid on is over (and you didn't win).
+             * All clients that bid, but did not win, will be notified that the bidding period is over for
+             * that item.
              */
             case 3:
             {
-                System.out.println("Someone won an item!");
-                //same thing as case 2
+                System.out.println("The bidding period for item #" + DATA[1] + " is over!");
             }
             /**
-             * Case 4 is when the bidding period is over.
+             * Case 4 is when the server notifies the original item owner that their item has been sold.
+             * Only the owner of the item will be notified.
              */
             case 4:
             {
-                Items tmp_items = new Items();
-                System.out.println("Bidding is over for an item!");
-                for (int i = 0; i < Client.ITEMS.size(); i++)
-                {
-                    tmp_items = (Items) Client.ITEMS.get(i);
-                    //gotta find the correct item
-                    //remove the item, break out of loop
-                }
-                break;
+                System.out.println("Your item #" + DATA[1] + " has been sold to " + DATA[2] + " for " + DATA[5] + "$.");
             }
             /**
-             * Case 5 empties the item list.
+             * Case 5 is when the server notifies the original owner that their item has not been sold.
+             * Only the owner of the item will be notified.
              */
             case 5:
             {
-                Client.ITEMS.clear();
-                break;
+                System.out.println("You item #" + DATA[1] + " has not been sold. Maybe don't overprice it next time.");
             }
         }
     }

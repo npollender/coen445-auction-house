@@ -1,7 +1,6 @@
 /**
  * Created for COEN445 Auction House Project by Nicholas and Liyuan.
  * Fall 2018
- */
 
 package Client;
 
@@ -9,28 +8,23 @@ import java.util.ArrayList;
 
 public class Items {
 
-    int ITEM_ID;
-    float MIN;
-    String DESC, NAME;
+    static int ITEM_ID;
+    static float MIN;
+    static String DESC;
 
     public Items() {}
 
-    public Items(String id, String min, String desc, String n)
+    public Items(String id, String desc, String min)
     {
         ITEM_ID = Integer.parseInt(id);
         MIN = new Float(min);
         DESC = desc;
-        NAME = n;
     }
 
     public void set_min(String s)
     {
         MIN = new Float(s);
     }
-
-    /**
-     * We'll need the 'get' methods to access the items information if a user asks for item details.
-     */
 
     public int get_id()
     {
@@ -47,11 +41,6 @@ public class Items {
         return DESC;
     }
 
-    public String get_name()
-    {
-        return NAME;
-    }
-
     public boolean check_dupes(ArrayList item_list)
     {
         for (int i = 0; i < item_list.size(); i++)
@@ -63,4 +52,4 @@ public class Items {
         }
         return false;
     }
-}
+} */
