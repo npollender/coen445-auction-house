@@ -12,6 +12,7 @@ public class Users {
     static String NAME;
     static InetAddress IP_ADDRESS;
     static int PORT;
+    static int NUMBER_OF_ITEMS = 0;
 
     public Users(String n, InetAddress ip, int port)
     {
@@ -33,5 +34,20 @@ public class Users {
     public int get_port()
     {
         return PORT;
+    }
+
+    public int get_num_for_sale()
+    {
+        return NUMBER_OF_ITEMS;
+    }
+
+    public void increment_items()
+    {
+        NUMBER_OF_ITEMS++;
+    }
+
+    public void decrement_items()
+    {
+        NUMBER_OF_ITEMS--;
     }
 }

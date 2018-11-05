@@ -29,7 +29,7 @@ public class SendHelper {
     public SendHelper() {}
 
     /**
-     * Register request to the server
+     * RegisterValidation request to the server
      */
     synchronized static String create_send_reg(int c, String request, String name, String ip, int port)
     {

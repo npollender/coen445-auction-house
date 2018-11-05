@@ -65,7 +65,7 @@ public class SendHelper {
     /**
      * Confirms offer back to the offering client.
      */
-    synchronized static String create_send_offer_conf(int c, String request, String id, String desc, int min)
+    synchronized static String create_send_offer_conf(int c, String request, int id, String desc, int min)
     {
         String msg = c + P + request + P + id + P + desc + P + min;
         return msg;
@@ -145,6 +145,15 @@ public class SendHelper {
     {
         String tmp = Integer.toString(r);
         String msg = c + P + id + P + tmp;
+        return msg;
+    }
+
+    /**
+     * Sends a new user a list of all available items.
+     */
+    synchronized static String create_send_existing_items(int c, int id, String desc, int min)
+    {
+        String msg = c + P + id + P + desc + P + min;
         return msg;
     }
 

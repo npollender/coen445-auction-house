@@ -11,6 +11,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
 
@@ -108,6 +109,15 @@ public class Client {
         System.out.println("A programming language walks into a bar and says 'Hello world!'");
     }
 
+    public static void HOLDUP(int time)
+    {
+        try
+        {
+            TimeUnit.SECONDS.sleep(time);
+        }
+        catch (InterruptedException e) {}
+    }
+
     public void addFunds()
     {
         System.out.println("Adding funds...");
@@ -143,6 +153,23 @@ public class Client {
                 catch (IOException e) {}
             }
         });
+
+        System.out.println("Welcome to TOTALLY NOT FAKE AUCTION HOUSE");
+        System.out.println("We're just going to take care of a few things for you...");
+        System.out.println("********************************************************");
+        System.out.println("Adding funds to your session...");
+        System.out.println("ERROR: missing funds!");
+        System.out.println("Search for source of funds...");
+        HOLDUP(5);
+        System.out.println("Selling all your belongings...");
+        HOLDUP(5);
+        System.out.println("Emptying your savings account...");
+        HOLDUP(5);
+        System.out.println("Stealing your credit card information...");
+        HOLDUP(5);
+        System.out.println("Alright, we're all set! Good luck!");
+        HOLDUP(30);
+
 
         listen.start();
 

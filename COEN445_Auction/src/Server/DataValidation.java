@@ -42,15 +42,15 @@ public class DataValidation implements Runnable {
             switch (Integer.parseInt(DATA[0]))
             {
                 case 0:
-                    new Register(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
+                    new RegisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
                 break;
 
                 case 1:
-                    new Deregister(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
+                    new DeregisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
                 break;
 
                 case 2:
-                    new Thread(new OfferItems(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
+                    new Thread(new OfferValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
                 break;
 
                 case 3:
