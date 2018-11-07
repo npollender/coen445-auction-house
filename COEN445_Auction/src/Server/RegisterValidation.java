@@ -109,7 +109,7 @@ public class RegisterValidation extends Thread {
                 return;
             }
 
-            USER = new Users(NAME, CLIENT_ADDRESS, PORT);
+            USER = new Users(NAME, CLIENT_ADDRESS, PORT, 0);
 
             if (!user_exists(NAME))
             {

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class InitializeUsers {
 
-    static int PORT;
+    static int PORT, NUMBER_OF_ITEMS;
     static String NAME, IP, S_PORT;
     static String[] DATA;
     static Users USER;
@@ -46,15 +46,16 @@ public class InitializeUsers {
             {
                 DATA = read.split("/");
 
-                if (DATA.length == 3)
+                if (DATA.length == 4)
                 {
                     NAME = DATA[0];
                     IP = DATA[1];
                     CLIENT_ADDRESS = InetAddress.getByName(IP);
                     S_PORT = DATA[2];
                     PORT = Integer.parseInt(S_PORT);
+                    NUMBER_OF_ITEMS = Integer.parseInt(DATA[3]);
 
-                    USER = new Users(NAME, CLIENT_ADDRESS, PORT);
+                    USER = new Users(NAME, CLIENT_ADDRESS, PORT, NUMBER_OF_ITEMS);
                     USERS.add(USER);
                 }
             }

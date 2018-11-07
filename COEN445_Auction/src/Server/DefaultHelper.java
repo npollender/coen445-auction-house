@@ -17,6 +17,7 @@ public class DefaultHelper {
     static int USER_INFO_SIZE_A = 5;
     static int USER_INFO_SIZE_B = 4;
     static int ITEM_INFO_SIZE = 6;
+    static int BID_INFO_SIZE = 4;
 
     static int REGISTER = 0;
     static int REGISTER_ERROR = 1;
@@ -24,6 +25,10 @@ public class DefaultHelper {
     static int DEREGISTER_ERROR = 3;
     static int OFFER = 4;
     static int OFFER_ERROR = 5;
+    static int BID;
+    static int BID_ERROR;
+
+    static int CODE_ERROR;
 
     static int ITEM_LIST;
     static int ITEM_ID = 0;

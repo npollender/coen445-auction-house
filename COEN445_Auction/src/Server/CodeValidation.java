@@ -11,26 +11,35 @@ import java.net.InetAddress;
 
 public class CodeValidation implements Runnable {
 
-    static String REC_DATA;
+    static String MESSAGE, CODE;
     static String[] DATA;
     static int PORT;
     static DatagramSocket SOCKET;
     static DatagramPacket PACKET;
     static InetAddress CLIENT_ADDRESS;
 
+    static String P = "/";
+
     public CodeValidation(DatagramSocket socket, DatagramPacket packet)
     {
         SOCKET = socket;
         PACKET = packet;
-        CLIENT_ADDRESS = PACKET.getAddress();
-        PORT = PACKET.getPort();
+        DATA = (new String(PACKET.getData())).split(P);
     }
 
     @Override
     public void run()
     {
-        //if data is valid it will add the info
-        //if data is invalid, add error bit
-        //send data
+        if (!DATA[1].isEmpty())
+        {
+            CODE = DATA[1];
+        }
+        else
+        {
+            CODE = "0";
+        }
+        MESSAGE = DefaultHelper.CODE_ERROR + P + CODE;
+        SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
+        System.out.println("code got fucked somewhere");
     }
 }

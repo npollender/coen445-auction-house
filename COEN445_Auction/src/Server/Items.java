@@ -41,4 +41,9 @@ public class Items {
     {
         return HI_BID;
     }
+
+    public int get_item_id()
+    {
+        return ID;
+    }
 }

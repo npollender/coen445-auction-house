@@ -69,13 +69,13 @@ public class DeregisterValidation extends Thread {
     private void dereg_success()
     {
         MESSAGE = SendHelper.create_send_dereg(DefaultHelper.DEREGISTER, REQUEST);
-        SendHelper.send(MESSAGE, USER.get_IP(), USER.get_port(), SOCKET);
+        SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
     private void dereg_error(int code)
     {
         MESSAGE = SendHelper.create_send_notReg(DefaultHelper.DEREGISTER_ERROR, REQUEST, code);
-        SendHelper.send(MESSAGE, USER.get_IP(), USER.get_port(), SOCKET);
+        SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
     private synchronized void remove_from_file(String name) throws IOException

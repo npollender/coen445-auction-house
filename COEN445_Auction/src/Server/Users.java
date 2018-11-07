@@ -14,11 +14,12 @@ public class Users {
     static int PORT;
     static int NUMBER_OF_ITEMS = 0;
 
-    public Users(String n, InetAddress ip, int port)
+    public Users(String n, InetAddress ip, int port, int number_of_items)
     {
         NAME = n;
         IP_ADDRESS = ip;
         PORT = port;
+        NUMBER_OF_ITEMS = number_of_items;
     }
 
     public String get_name()

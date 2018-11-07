@@ -67,13 +67,13 @@ public class OfferValidation implements Runnable {
     private void offer_success()
     {
         MESSAGE = SendHelper.create_send_offer_conf(DefaultHelper.OFFER, REQUEST, ID, DESC, MIN);
-        SendHelper.send(MESSAGE, USER.get_IP(), USER.get_port(), SOCKET);
+        SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
     private void offer_error(int code)
     {
         MESSAGE = SendHelper.create_send_offer_fail(DefaultHelper.OFFER_ERROR, REQUEST, code);
-        SendHelper.send(MESSAGE, USER.get_IP(), USER.get_port(), SOCKET);
+        SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
     private synchronized void write_to_file() throws IOException
