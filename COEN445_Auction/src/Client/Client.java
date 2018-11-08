@@ -26,49 +26,51 @@ public class Client {
 
     public Client() {}
 
-    private void userRegisteredCheck()
+    private static void userRegister()
     {
-        if (IS_REGISTERED)
-            System.out.println("You are already registered you door knob!");
+        if (!IS_REGISTERED)
+        {
+            Scanner input = new Scanner(System.in);
+            System.out.print("Enter desired username: ");
+            NAME = input.nextLine();
+            REQUEST = NAME;
+            new Thread(new SendRegister()).start();
+        }
+        else
+        {
+            System.out.println("you are already registered");
+        }
     }
 
-    private void userRegister()
-    {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter desired username: ");
-        NAME = input.nextLine();
-        REQUEST = NAME;
-        new Thread(new Action(0)).start();
-    }
-
-    private void userDeregisteredCheck()
+    private static void userDeregisteredCheck()
     {
         if (!IS_REGISTERED)
             System.out.println("You need to be registered to de-register...");
         else
-            new Thread(new Action(1)).start();
+            new Thread(new SendDeregister()).start();
     }
 
-    private void userOfferedCheck()
+    private static void userOffer()
     {
-        if (!IS_REGISTERED)
-            System.out.println("You need to be registered to offer an item...");
-    }
+        if (IS_REGISTERED)
+        {
+            Scanner input = new Scanner(System.in);
+            System.out.print("Enter item name: ");
+            ITEM_NAME = input.nextLine();
+            System.out.print("Enter item description: ");
+            DESC = input.nextLine();
+            System.out.print("Enter minimum bid: ");
+            MIN = input.nextLine();
 
-    private void userOffer()
-    {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter item name: ");
-        ITEM_NAME = input.nextLine();
-        System.out.println("Enter item description: ");
-        DESC = input.nextLine();
-        System.out.println("Enter minimum bid: ");
-        MIN = input.nextLine();
-
-        if (!onlyContainsNumbers(MIN) || MIN.length() <= 0)
-            System.out.println("Invalid starting bid entered.");
+            if (!onlyContainsNumbers(MIN) || MIN.length() <= 0)
+                System.out.println("Invalid starting bid entered.");
+            else
+                new Thread(new SendOffer()).start();
+        }
         else
-            new Thread(new Action(2)).start();
+        {
+            System.out.println("you must be registered to offer");
+        }
     }
 
     private void userBidCheck()
@@ -88,10 +90,10 @@ public class Client {
         if(!onlyContainsNumbers(BID) || BID.length() <= 0)
             System.out.println("Invalid bid entered.");
         else
-            new Thread(new Action(3)).start();
+            new Thread(new SendBid()).start();
     }
 
-    private boolean onlyContainsNumbers(String s)
+    private static boolean onlyContainsNumbers(String s)
     {
         try
         {
@@ -128,7 +130,7 @@ public class Client {
     {
         PORT = DefaultHelper.PORT;
         SERVER = DefaultHelper.SERVER;
-        SOCKET = new DatagramSocket(PORT);
+        SOCKET = new DatagramSocket();
         SERVER_ADDRESS = InetAddress.getByName(SERVER);
         IP_ADDRESS = InetAddress.getLocalHost();
         IP = IP_ADDRESS.getHostAddress();
@@ -153,7 +155,7 @@ public class Client {
                 catch (IOException e) {}
             }
         });
-
+/*
         System.out.println("Welcome to TOTALLY NOT FAKE AUCTION HOUSE");
         System.out.println("We're just going to take care of a few things for you...");
         System.out.println("********************************************************");
@@ -169,13 +171,30 @@ public class Client {
         HOLDUP(5);
         System.out.println("Alright, we're all set! Good luck!");
         HOLDUP(30);
-
+*/
 
         listen.start();
 
         while (!EXIT)
         {
             System.out.print("Enter a command: ");
+            command = input.nextLine();
+            if (command.equals("register"))
+            {
+                userRegister();
+            }
+            else if (command.equals("deregister"))
+            {
+                userDeregisteredCheck();
+            }
+            else if (command.equals("offer"))
+            {
+                userOffer();
+            }
+            else if (command.equals("exit"))
+            {
+                EXIT = true;
+            }
 
         }
 

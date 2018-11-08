@@ -38,6 +38,7 @@ public class ItemsValidation extends Thread {
             case 1:
             {
                 System.out.println("New highest bid of " + DATA[2] + "$ on item #" + DATA[1]);
+                break;
             }
             /**
              * Case 2 is when an item is won.
@@ -46,6 +47,7 @@ public class ItemsValidation extends Thread {
             case 2:
             {
                 System.out.println("Congratulations, you won item #" + DATA[1] + " for " + DATA[5] + "$.");
+                break;
             }
             /**
              * Case 3 is when the bidding period for an item you bid on is over (and you didn't win).
@@ -55,6 +57,7 @@ public class ItemsValidation extends Thread {
             case 3:
             {
                 System.out.println("The bidding period for item #" + DATA[1] + " is over!");
+                break;
             }
             /**
              * Case 4 is when the server notifies the original item owner that their item has been sold.
@@ -63,6 +66,7 @@ public class ItemsValidation extends Thread {
             case 4:
             {
                 System.out.println("Your item #" + DATA[1] + " has been sold to " + DATA[2] + " for " + DATA[5] + "$.");
+                break;
             }
             /**
              * Case 5 is when the server notifies the original owner that their item has not been sold.
@@ -71,6 +75,7 @@ public class ItemsValidation extends Thread {
             case 5:
             {
                 System.out.println("You item #" + DATA[1] + " has not been sold. Maybe don't overprice it next time.");
+                break;
             }
         }
     }

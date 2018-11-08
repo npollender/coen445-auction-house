@@ -80,10 +80,10 @@ public class RegisterValidation extends Thread {
 
     private synchronized void write_to_file() throws IOException
     {
-            USER_DATA = new File("user_data.txt");
-            OUT = new PrintWriter(new FileWriter(USER_DATA), true);
-            OUT.println(NAME + P + IP + P + PORT + P + USER.get_num_for_sale());
-            OUT.close();
+        USER_DATA = new File("user_data.txt");
+        OUT = new PrintWriter(new FileWriter(USER_DATA, true));
+        OUT.println(NAME + P + IP + P + PORT + P + USER.get_num_for_sale());
+        OUT.close();
     }
 
     @Override
@@ -91,21 +91,30 @@ public class RegisterValidation extends Thread {
     {
         DATA = REC_DATA.split(P);
 
-        if (DATA.length == DefaultHelper.USER_INFO_SIZE_A)
+        if (DATA.length > 0)
         {
             REQUEST = DATA[1];
             NAME = DATA[2];
             IP = DATA[3];
             S_PORT = DATA[4];
-            PORT = Integer.parseInt(S_PORT);
             try
             {
                 CLIENT_ADDRESS = InetAddress.getByName(IP);
             }
             catch (Exception e)
             {
-                reg_error(DefaultHelper.REG_ERROR_2);
+                reg_error(DefaultHelper.REG_ERROR_1);
                 System.out.println("USER: " + NAME + " / Error: cannot register, invalid IP Address.");
+                return;
+            }
+            try
+            {
+                PORT = Integer.parseInt(S_PORT);
+            }
+            catch (Exception e)
+            {
+                reg_error(DefaultHelper.REG_ERROR_1);
+                System.out.println("USER: " + NAME + " / Error: cannot register, invalid port number.");
                 return;
             }
 
@@ -125,13 +134,13 @@ public class RegisterValidation extends Thread {
             }
             else
             {
-                reg_error(DefaultHelper.REG_ERROR_0);
+                reg_error(DefaultHelper.REG_ERROR_2);
                 System.out.println("USER: " + NAME + " / Error: cannot register, user already exists.");
             }
         }
         else
         {
-            reg_error(DefaultHelper.REG_ERROR_1);
+            reg_error(DefaultHelper.REG_ERROR_0);
             System.out.println("USER: " + NAME + " / Error: cannot register, invalid information provided.");
         }
     }

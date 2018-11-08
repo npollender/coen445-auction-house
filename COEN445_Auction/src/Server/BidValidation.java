@@ -87,7 +87,7 @@ public class BidValidation implements Runnable {
             {
                 if (item_exists(ID))
                 {
-                    //bid on item
+                    ITEM.bid(USER, BID, REQUEST);
                 }
                 else
                 {

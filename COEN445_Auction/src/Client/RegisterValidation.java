@@ -16,7 +16,7 @@ public class RegisterValidation extends Thread {
 
     public RegisterValidation(int code, String[] data)
     {
-        DATA = DATA;
+        DATA = data;
         CODE = code;
     }
 

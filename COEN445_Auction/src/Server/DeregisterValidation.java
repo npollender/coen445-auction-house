@@ -95,8 +95,8 @@ public class DeregisterValidation extends Thread {
         }
         BUFFERED_READER.close();
         OUT.close();
-        tmp.renameTo(USER_DATA);
         USER_DATA.delete();
+        tmp.renameTo(USER_DATA);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class DeregisterValidation extends Thread {
     {
         DATA = REC_DATA.split(P);
 
-        if (DATA.length == DefaultHelper.USER_INFO_SIZE_B)
+        if (DATA.length > 0)
         {
             REQUEST = DATA[1];
             NAME = DATA[2];
@@ -120,8 +120,8 @@ public class DeregisterValidation extends Thread {
 
             for (int i = 0; i < USERS.size(); i++)
             {
-                if (USERS.get(i).get_name().equals(NAME) && USERS.get(i).get_IP() == CLIENT_ADDRESS) {
-                    USER = USERS.get(i);
+                USER = Server.USERS.get(i);
+                if (USER.get_name().equals(NAME)) {
                     EXISTS = true;
                     if (has_items())
                     {
@@ -144,7 +144,7 @@ public class DeregisterValidation extends Thread {
             }
             else
             {
-                USERS.remove(USER);
+                Server.USERS.remove(USER);
                 dereg_success();
                 try
                 {

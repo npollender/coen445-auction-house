@@ -12,14 +12,13 @@ import java.util.ArrayList;
 
 public class DataValidation implements Runnable {
 
-    static String REC_DATA;
+    static int CODE;
+    static String S_CODE, REC_DATA;
     static String[] DATA;
-    static int PORT;
     static ArrayList<Users> USERS;
     static ArrayList<Items> ITEMS;
     static DatagramSocket SOCKET;
     static DatagramPacket PACKET;
-    static InetAddress CLIENT_ADDRESS;
 
     public DataValidation(DatagramSocket socket, DatagramPacket packet, ArrayList<Users> users, ArrayList<Items> items)
     {
@@ -39,23 +38,33 @@ public class DataValidation implements Runnable {
 
         if (DATA.length > 0)
         {
-            switch (Integer.parseInt(DATA[0]))
+            try
             {
-                case 0:
+                S_CODE = DATA[0];
+                CODE = Integer.parseInt(S_CODE);
+            }
+            catch (Exception e) {}
+            switch (CODE)
+            {
+                case 0: {
                     new RegisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
-                break;
+                    break;
+                }
 
-                case 1:
+                case 1: {
                     new DeregisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
-                break;
+                    break;
+                }
 
-                case 2:
+                case 2: {
                     new Thread(new OfferValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
-                break;
+                    break;
+                }
 
-                case 3:
+                case 3: {
                     new Thread(new BidValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
-                break;
+                    break;
+                }
             }
         }
         else

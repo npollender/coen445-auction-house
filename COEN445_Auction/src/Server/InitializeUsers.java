@@ -23,6 +23,8 @@ public class InitializeUsers {
     static BufferedReader BUFFERED_READER;
     static File USER_DATA;
 
+    static String P = "/";
+
     public InitializeUsers(ArrayList<Users> users)
     {
         USERS = users;
@@ -44,7 +46,7 @@ public class InitializeUsers {
 
             while ((read = BUFFERED_READER.readLine()) != null)
             {
-                DATA = read.split("/");
+                DATA = read.split(P);
 
                 if (DATA.length == 4)
                 {

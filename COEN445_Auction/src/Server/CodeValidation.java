@@ -13,10 +13,8 @@ public class CodeValidation implements Runnable {
 
     static String MESSAGE, CODE;
     static String[] DATA;
-    static int PORT;
     static DatagramSocket SOCKET;
     static DatagramPacket PACKET;
-    static InetAddress CLIENT_ADDRESS;
 
     static String P = "/";
 

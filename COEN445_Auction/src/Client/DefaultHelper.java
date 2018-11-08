@@ -39,6 +39,7 @@ public class DefaultHelper {
      */
     static String OFFER_FAILED_0 = "0";
     static String OFFER_FAILED_1 = "1";
+    static String OFFER_FAILED_2 = "2";
 
     /**
      * Bid error id's

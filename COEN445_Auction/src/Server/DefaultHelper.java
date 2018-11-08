@@ -25,6 +25,7 @@ public class DefaultHelper {
     static int DEREGISTER_ERROR = 3;
     static int OFFER = 4;
     static int OFFER_ERROR = 5;
+    static int OFFER_BROADCAST = 6;
     static int BID;
     static int BID_ERROR;
 
@@ -40,6 +41,8 @@ public class DefaultHelper {
     static int DEREG_ERROR_0 = 0;
 
     static int OFFER_ERROR_0 = 0;
+    static int OFFER_ERROR_1 = 1;
+    static int OFFER_ERROR_2 = 2;
 
     public DefaultHelper() {}
 }

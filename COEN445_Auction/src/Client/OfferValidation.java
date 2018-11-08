@@ -31,7 +31,7 @@ public class OfferValidation extends Thread {
             {
                 if (DATA[1].equals(REQUEST))
                 {
-                    System.out.println("Your item has been offered.");
+                    System.out.println("Item has been offered with an ID of " + DATA[2] + ".");
                 }
                 break;
             }
@@ -54,6 +54,10 @@ public class OfferValidation extends Thread {
                     if (DATA[2].equals(DefaultHelper.OFFER_FAILED_1))
                     {
                         System.out.println("Offer failed, you are not registered.");
+                    }
+                    if (DATA[2].equals(DefaultHelper.OFFER_FAILED_2))
+                    {
+                        System.out.println("Offer failed, you've exceeded your item limit.");
                     }
                 }
                 break;

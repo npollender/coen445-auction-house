@@ -24,7 +24,7 @@ public class SendHelper {
     static public Lock READ_LIST = RW_ITEM_LOCK.readLock();
     static public Lock WRITE_LIST = RW_ITEM_LOCK.writeLock();
 
-    static char P = '/';
+    static String P = "/";
 
     public SendHelper() {}
 
@@ -33,7 +33,7 @@ public class SendHelper {
      */
     synchronized static String create_send_reg(int c, String request, String name, String ip, int port)
     {
-        String msg = c + P + request + P + name + P + ip + P + port;
+        String msg = c + P + request + P + name + P + ip + P + port + P;
         return msg;
     }
 
@@ -42,7 +42,7 @@ public class SendHelper {
      */
     synchronized static String create_send_dereg(int c, String request, String name, String ip)
     {
-        String msg = c + P + request + P + name + P + ip;
+        String msg = c + P + request + P + name + P + ip + P;
         return msg;
     }
 
@@ -51,7 +51,7 @@ public class SendHelper {
      */
     synchronized static String create_send_offer(int c, String request, String name, String ip, String i_desc, String min)
     {
-        String msg = c + P + request + P + name + P + ip + P + i_desc + P + min;
+        String msg = c + P + request + P + name + P + ip + P + i_desc + P + min + P;
         return msg;
     }
 
@@ -61,7 +61,7 @@ public class SendHelper {
      */
     synchronized static String create_send_bid(int c, String request, int id, String bid)
     {
-        String msg = c + P + request + P + id + P + bid;
+        String msg = c + P + request + P + id + P + bid + P;
         return msg;
     }
 
@@ -71,6 +71,7 @@ public class SendHelper {
             MESSAGE = data.getBytes();
             DatagramPacket packet = new DatagramPacket(MESSAGE, MESSAGE.length, Client.SERVER_ADDRESS, Client.PORT);
             Client.SOCKET.send(packet);
+            return;
         }
         catch (IOException e) {}
     }
