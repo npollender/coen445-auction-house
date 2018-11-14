@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * We're using a helper class here for sending information regarding the server.
@@ -20,18 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SendHelper {
 
-    static byte[] MESSAGE = new byte[DefaultHelper.MSG_SIZE];
-
-    static final private ReentrantReadWriteLock RW_USER_LOCK = new ReentrantReadWriteLock();
-    static public Lock READ_LIST_U = RW_USER_LOCK.readLock();
-    static public Lock WRITE_LIST_U = RW_USER_LOCK.writeLock();
-
-    static final private ReentrantReadWriteLock RW_ITEM_LOCK = new ReentrantReadWriteLock();
-    static public Lock READ_LIST_I = RW_ITEM_LOCK.readLock();
-    static public Lock WRITE_LIST_I = RW_ITEM_LOCK.writeLock();
-
-    static int PORT;
-    static String SERVER;
+    private static byte[] MESSAGE = new byte[DefaultHelper.MSG_SIZE];
 
     static String P = "/";
 
@@ -87,6 +74,15 @@ public class SendHelper {
     synchronized static String create_send_new_item(int c, int id, String desc, int min, int port)
     {
         String msg = c + P + id + P + desc + P + min + P + port + P;
+        return msg;
+    }
+
+    /**
+     * Sends client message that bid succeeded.
+     */
+    synchronized static String create_send_bid_conf(int c, String request)
+    {
+        String msg = c + P + request + P;
         return msg;
     }
 

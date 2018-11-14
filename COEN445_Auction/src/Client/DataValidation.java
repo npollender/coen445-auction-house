@@ -5,6 +5,8 @@
 
 package Client;
 
+import Server.Items;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -74,8 +76,49 @@ public class DataValidation implements Runnable {
                     new ItemsValidation(0, DATA).start();
                     break;
                 }
+                case 7:
+                {
+                    new BidValidation(1, DATA).start();
+                    break;
+                }
+                case 8:
+                {
+                    new BidValidation(0, DATA).start();
+                    break;
+                }
+                case 9:
+                {
+                    new ItemsValidation(1, DATA).start();
+                    break;
+                }
+                case 10:
+                {
+                    new ItemsValidation(6, DATA).start();
+                    break;
+                }
+                case 11:
+                {
+                    new ItemsValidation(3, DATA).start();
+                    break;
+                }
+                case 12:
+                {
+                    new ItemsValidation(4, DATA).start();
+                    break;
+                }
+                case 13:
+                {
+                    new ItemsValidation(2, DATA).start();
+                    break;
+                }
+                case 14:
+                {
+                    new ItemsValidation(5, DATA).start();
+                    break;
+                }
                 default:
                 {
+                    Client.textArea.append("Looks like something went wrong with the server... Sorry!");
                     break;
                 }
             }

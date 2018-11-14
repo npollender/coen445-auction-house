@@ -54,8 +54,7 @@ public class RegisterValidation extends Thread {
                         {
                             if (DATA[4].equals(PORT))
                             {
-                                TimerHelper.time_stop();
-                                System.out.println("You have been registered as " + NAME);
+                                Client.textArea.append("You have been registered as " + NAME + Client.nextLine);
                                 Client.IS_REGISTERED = true;
                             }
                         }
@@ -77,18 +76,15 @@ public class RegisterValidation extends Thread {
                      */
                     if (DATA[2].equals(DefaultHelper.REG_FAILED_0))
                     {
-                        TimerHelper.time_stop();
-                        System.out.println("Registration failed, wrong user information provided.");
+                        Client.textArea.append("Registration failed, wrong user information provided." + Client.nextLine);
                     }
                     else if (DATA[2].equals(DefaultHelper.REG_FAILED_1))
                     {
-                        TimerHelper.time_stop();
-                        System.out.println("Registration failed, wrong server information provided.");
+                        Client.textArea.append("Registration failed, wrong server information provided." + Client.nextLine);
                     }
                     else if (DATA[2].equals(DefaultHelper.REG_FAILED_2))
                     {
-                        TimerHelper.time_stop();
-                        System.out.println("Registration failed, user already exists.");
+                        Client.textArea.append("Registration failed, user already exists." + Client.nextLine);
                     }
                 }
                 break;
@@ -101,8 +97,7 @@ public class RegisterValidation extends Thread {
             {
                 if (DATA[1].equals(REQUEST))
                 {
-                    TimerHelper.time_stop();
-                    System.out.println("You have been de-registered.");
+                    Client.textArea.append("You have been de-registered." + Client.nextLine);
                     userClear();
                 }
                 break;
@@ -123,19 +118,23 @@ public class RegisterValidation extends Thread {
                      */
                     if (DATA[2].equals(DefaultHelper.DEREG_FAILED_0))
                     {
-                        System.out.println("De-registration failed, you aren't registered.");
+                        Client.textArea.append("De-registration failed, there was a problem with the socket information." + Client.nextLine);
                     }
                     else if (DATA[2].equals(DefaultHelper.DEREG_FAILED_1))
                     {
-                        System.out.println("De-registration failed, wrong user info provided.");
+                        Client.textArea.append("De-registration failed, you still have item(s) for sale." + Client.nextLine);
                     }
                     else if (DATA[2].equals(DefaultHelper.DEREG_FAILED_2))
                     {
-                        System.out.println("De-registration failed, you still have items for sale.");
+                        Client.textArea.append("De-registration failed, you still have the highest bid on item(s)." + Client.nextLine);
                     }
                     else if (DATA[2].equals(DefaultHelper.DEREG_FAILED_3))
                     {
-                        System.out.println("De-registration failed, you still have the highest bid on an item(s).");
+                        Client.textArea.append("De-registration failed, your username does not exist in the auction server." + Client.nextLine);
+                    }
+                    else if (DATA[2].equals(DefaultHelper.DEREG_FAILED_4))
+                    {
+                        Client.textArea.append("De-registration failed, there was a problem with the provided information." + Client.nextLine);
                     }
                 }
                 break;

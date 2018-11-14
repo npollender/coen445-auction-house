@@ -13,33 +13,19 @@ import java.util.concurrent.TimeUnit;
 
 public class Server {
 
-    static int PORT;
-    static String SERVER, IP;
-    static InetAddress CLIENT_ADDRESS, IP_ADDRESS;
-
-    static DatagramSocket SOCKET;
-    static DatagramPacket PACKET;
-
-    static ArrayList<Users> USERS = new ArrayList<Users>();
-    static ArrayList<Items> ITEMS = new ArrayList<Items>();
-
-    public static void HOLDUP(int time)
-    {
-        try
-        {
-            TimeUnit.SECONDS.sleep(time);
-        }
-        catch (InterruptedException e) {}
-    }
+    static boolean RESTORE;
 
     public static void main(String args[]) throws Exception
     {
-        PORT = DefaultHelper.PORT;
-        SERVER = DefaultHelper.SERVER;
-        SOCKET = new DatagramSocket(PORT);
-        CLIENT_ADDRESS = InetAddress.getByName(SERVER);
-        IP_ADDRESS = InetAddress.getLocalHost();
-        IP = IP_ADDRESS.getHostAddress();
+        int PORT = DefaultHelper.PORT;
+        String SERVER = DefaultHelper.SERVER;
+        DatagramSocket SOCKET = new DatagramSocket(PORT);
+        InetAddress CLIENT_ADDRESS = InetAddress.getByName(SERVER);
+        InetAddress IP_ADDRESS = InetAddress.getLocalHost();
+        String IP = IP_ADDRESS.getHostAddress();
+
+        ArrayList<Users> USERS = new ArrayList<Users>();
+        ArrayList<Items> ITEMS = new ArrayList<Items>();
 
         InitializeUsers init_users = new InitializeUsers(USERS);
         init_users.init();
@@ -47,10 +33,12 @@ public class Server {
         InitializeItems init_items = new InitializeItems(SOCKET, USERS, ITEMS);
         init_items.init();
 
+        System.out.println("Server started. Data exchange will be displayed here.");
+
         while (true)
         {
             byte[] data = new byte[DefaultHelper.MSG_SIZE];
-            PACKET = new DatagramPacket(data, data.length);
+            DatagramPacket PACKET = new DatagramPacket(data, data.length);
             SOCKET.receive(PACKET);
             new Thread(new DataValidation(SOCKET, PACKET, USERS, ITEMS)).start();
         }

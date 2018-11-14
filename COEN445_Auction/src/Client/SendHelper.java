@@ -7,8 +7,6 @@ package Client;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * We're using a helper class here for sending information regarding the server.
@@ -19,10 +17,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class SendHelper {
 
     static public byte[] MESSAGE = new byte[DefaultHelper.MSG_SIZE];
-
-    static final private ReentrantReadWriteLock RW_ITEM_LOCK = new ReentrantReadWriteLock();
-    static public Lock READ_LIST = RW_ITEM_LOCK.readLock();
-    static public Lock WRITE_LIST = RW_ITEM_LOCK.writeLock();
 
     static String P = "/";
 

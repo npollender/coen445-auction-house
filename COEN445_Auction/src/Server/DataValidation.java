@@ -10,15 +10,18 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+/**
+ * This class takes the data received from the client and runs threads according to the data.
+ */
 public class DataValidation implements Runnable {
 
-    static int CODE;
-    static String S_CODE, REC_DATA;
-    static String[] DATA;
-    static ArrayList<Users> USERS;
-    static ArrayList<Items> ITEMS;
-    static DatagramSocket SOCKET;
-    static DatagramPacket PACKET;
+    private int CODE;
+    private String S_CODE, REC_DATA;
+    private String[] DATA;
+    private ArrayList<Users> USERS;
+    private ArrayList<Items> ITEMS;
+    private DatagramSocket SOCKET;
+    private DatagramPacket PACKET;
 
     public DataValidation(DatagramSocket socket, DatagramPacket packet, ArrayList<Users> users, ArrayList<Items> items)
     {
@@ -30,6 +33,11 @@ public class DataValidation implements Runnable {
         DATA = REC_DATA.split("/");
     }
 
+    /**
+     * The thread runs from here.
+     * We have 4 possible outcomes listed below.
+     * A fifth outcome exists if the data gets screwed up somehow.
+     */
     @Override
     public void run()
     {
@@ -46,28 +54,35 @@ public class DataValidation implements Runnable {
             catch (Exception e) {}
             switch (CODE)
             {
-                case 0: {
+                case 0:
+                {
                     new RegisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
                     break;
                 }
 
-                case 1: {
+                case 1:
+                {
                     new DeregisterValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS).start();
                     break;
                 }
 
-                case 2: {
+                case 2:
+                {
                     new Thread(new OfferValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
                     break;
                 }
 
-                case 3: {
+                case 3:
+                {
                     new Thread(new BidValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
+                    break;
+                }
+                default:
+                {
+                    System.out.println("Something went wrong with the client that sent this message... Sorry!");
                     break;
                 }
             }
         }
-        else
-            new Thread(new CodeValidation(SOCKET, PACKET)).start();
     }
 }

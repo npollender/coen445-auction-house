@@ -11,26 +11,29 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+/**
+ * This class concerns everything to do with deregistering.
+ */
 public class DeregisterValidation extends Thread {
 
-    static String REC_DATA, REQUEST, NAME, IP, MESSAGE;
-    static String[] DATA;
+    private String REC_DATA, REQUEST, NAME, IP, MESSAGE;
+    private String[] DATA;
 
-    static InetAddress CLIENT_ADDRESS;
-    static DatagramSocket SOCKET;
-    static DatagramPacket PACKET;
+    private InetAddress CLIENT_ADDRESS;
+    private DatagramSocket SOCKET;
+    private DatagramPacket PACKET;
 
-    static Users USER;
-    static ArrayList<Users> USERS;
-    static ArrayList<Items> ITEMS;
+    private Users USER;
+    private ArrayList<Users> USERS;
+    private ArrayList<Items> ITEMS;
 
-    static File USER_DATA;
-    static PrintWriter OUT;
-    static BufferedReader BUFFERED_READER;
+    private File USER_DATA;
+    private PrintWriter OUT;
+    private BufferedReader BUFFERED_READER;
 
-    static boolean EXISTS;
+    private boolean EXISTS;
 
-    static String P = "/";
+    private String P = "/";
 
     public DeregisterValidation(String rd, DatagramSocket socket, DatagramPacket packet, ArrayList<Users> users, ArrayList<Items> items)
     {
@@ -41,6 +44,10 @@ public class DeregisterValidation extends Thread {
         ITEMS = items;
     }
 
+    /**
+     * Method for checking if user still has items for sale.
+     * If they do, they cannot deregister.
+     */
     private boolean has_items()
     {
         for (int i = 0; i < ITEMS.size(); i++)
@@ -53,6 +60,10 @@ public class DeregisterValidation extends Thread {
         return false;
     }
 
+    /**
+     * Method for checking if user still has the highest bid on an item.
+     * If they do, they cannot deregister.
+     */
     private boolean has_highest_bid()
     {
         Items tmp_items;
@@ -66,18 +77,28 @@ public class DeregisterValidation extends Thread {
         return false;
     }
 
+    /**
+     * This method sends a confirmation to the client that they have been deregistered.
+     */
     private void dereg_success()
     {
         MESSAGE = SendHelper.create_send_dereg(DefaultHelper.DEREGISTER, REQUEST);
         SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
+    /**
+     * This method sends an error message to the client.
+     * The error code is defined in DefaultHelper.java
+     */
     private void dereg_error(int code)
     {
         MESSAGE = SendHelper.create_send_notReg(DefaultHelper.DEREGISTER_ERROR, REQUEST, code);
         SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
+    /**
+     * This method takes care of removing the deregistered user from the backup file.
+     */
     private synchronized void remove_from_file(String name) throws IOException
     {
         USER_DATA = new File("user_data.txt");
@@ -99,9 +120,15 @@ public class DeregisterValidation extends Thread {
         tmp.renameTo(USER_DATA);
     }
 
+    /**
+     * The thread runs from here.
+     * Nothing will happen if the data is empty.
+     * Errors are outlined in the system message lines.
+     */
     @Override
     public void run()
     {
+        //split the data into an array of strings
         DATA = REC_DATA.split(P);
 
         if (DATA.length > 0)
@@ -116,35 +143,45 @@ public class DeregisterValidation extends Thread {
             catch (Exception e)
             {
                 dereg_error(DefaultHelper.DEREG_ERROR_0);
+                System.out.println("USER: " + NAME + " / Error: cannot deregister, invalid ip address.");
             }
 
+            //we go through the list of users on the server
             for (int i = 0; i < USERS.size(); i++)
             {
-                USER = Server.USERS.get(i);
+                USER = USERS.get(i);
+
+                //we check if the user is present
                 if (USER.get_name().equals(NAME)) {
                     EXISTS = true;
+
+                    //the user if found but we have to check if they have items for sale, this takes priority over highest bids.
                     if (has_items())
                     {
-                        dereg_error(DefaultHelper.DEREG_ERROR_0);
+                        dereg_error(DefaultHelper.DEREG_ERROR_1);
                         System.out.println("USER: " + NAME + " / Error: cannot deregister, user still has items for sale.");
                         return;
                     }
+
+                    //and also check if they the highest bid on any items
                     else if (has_highest_bid())
                     {
-                        dereg_error(DefaultHelper.DEREG_ERROR_0);
+                        dereg_error(DefaultHelper.DEREG_ERROR_2);
                         System.out.println("USER: " + NAME + " / Error: cannot deregister, user still has a highest bid.");
                         return;
                     }
                 }
             }
+            //the user doesn't exist
             if (!EXISTS)
             {
-                dereg_error(DefaultHelper.DEREG_ERROR_0);
+                dereg_error(DefaultHelper.DEREG_ERROR_3);
                 System.out.println("USER: " + NAME + " / Error: cannot deregister, user does not exist.");
             }
             else
             {
-                Server.USERS.remove(USER);
+                //user is removed from the server, confirmation sent to client, and user removed from backup file
+                USERS.remove(USER);
                 dereg_success();
                 try
                 {
@@ -156,7 +193,7 @@ public class DeregisterValidation extends Thread {
         }
         else
         {
-            dereg_error(DefaultHelper.DEREG_ERROR_0);
+            dereg_error(DefaultHelper.DEREG_ERROR_4);
             System.out.println("USER: " + NAME + " / Error: cannot deregister, wrong info provided.");
         }
     }

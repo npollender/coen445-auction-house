@@ -5,28 +5,30 @@
 
 package Server;
 
-import java.io.File;
-import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.util.ArrayList;
 
+/**
+ * This class concerns everything to do with correct bid information.
+ * This class will send an error back to the client or validate a bid.
+ * An actual bid on an item is transferred over to Items.java
+ */
 public class BidValidation implements Runnable {
 
-    static String REC_DATA, REQUEST, MESSAGE;
-    static String[] DATA;
-    static int ID, BID;
+    private String REC_DATA, REQUEST, MESSAGE;
+    private String[] DATA;
+    private int ID, BID;
 
-    static DatagramSocket SOCKET;
-    static DatagramPacket PACKET;
+    private DatagramSocket SOCKET;
+    private DatagramPacket PACKET;
 
-    static Users USER;
-    static Items ITEM;
-    static ArrayList<Users> USERS;
-    static ArrayList<Items> ITEMS;
+    private Users USER;
+    private Items ITEM;
+    private ArrayList<Users> USERS;
+    private ArrayList<Items> ITEMS;
 
-    static String P = "/";
+    private String P = "/";
 
     public BidValidation(String rd, DatagramSocket socket, DatagramPacket packet, ArrayList<Users> users, ArrayList<Items> items)
     {
@@ -37,6 +39,9 @@ public class BidValidation implements Runnable {
         ITEMS = items;
     }
 
+    /**
+     * This method finds the user in question on the server. If found it will update the local USER variable.
+     */
     private boolean is_registered()
     {
         for (int i = 0; i < USERS.size(); i++)
@@ -52,6 +57,9 @@ public class BidValidation implements Runnable {
         return false;
     }
 
+    /**
+     * This method finds the item in question on the server. If found it will update the local ITEM variable.
+     */
     private boolean item_exists(int id)
     {
         for (int i = 0; i < ITEMS.size(); i++)
@@ -67,44 +75,59 @@ public class BidValidation implements Runnable {
         return false;
     }
 
+    /**
+     * This method sends an error message to the client.
+     * The variable code is defined in DefaultHelper.java
+     */
     private void bid_error(int code)
     {
         MESSAGE = SendHelper.create_send_bid_fail(DefaultHelper.BID_ERROR, REQUEST, code);
         SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
+    /**
+     * The thread runs from here.
+     * Nothing will happen if the data is empty.
+     * Errors are outlined in the system message lines.
+     */
     @Override
     public void run()
     {
+        //Split the data into an array of strings
         DATA = REC_DATA.split(P);
 
-        if (DATA.length == DefaultHelper.BID_INFO_SIZE)
+        if (DATA.length > 0)
         {
+            //assign data to corresponding variables
             REQUEST = DATA[1];
             ID = Integer.parseInt(DATA[2]);
             BID = Integer.parseInt(DATA[3]);
+
+            //we check if the user is registered before proceeding
             if (is_registered())
             {
+                //then we check if the item exists before proceeding
                 if (item_exists(ID))
                 {
-                    ITEM.bid(USER, BID, REQUEST);
+                    //once the user and item are found, we send the bid request
+                    ITEM.bid(USER, BID, REQUEST, ID);
                 }
                 else
                 {
-                    bid_error(0);
-                    System.out.println("item doesnt exist");
+                    bid_error(DefaultHelper.BID_ERROR_0);
+                    System.out.println("Bid attempt made on item #" + ID + " / Error: item does not exist.");
                 }
             }
             else
             {
-                bid_error(0);
-                System.out.println("user doesnt exist");
+                bid_error(DefaultHelper.BID_ERROR_1);
+                System.out.println("Error: bid attempt made by a user that does not exist.");
             }
         }
         else
         {
-            bid_error(0);
-            System.out.println("wrong info");
+            bid_error(DefaultHelper.BID_ERROR_2);
+            System.out.println("Bid attempt made on item #" + ID + " / Error: invalid information provided.");
         }
     }
 }

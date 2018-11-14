@@ -31,7 +31,7 @@ public class OfferValidation extends Thread {
             {
                 if (DATA[1].equals(REQUEST))
                 {
-                    System.out.println("Item has been offered with an ID of " + DATA[2] + ".");
+                    Client.textArea.append("Item has been offered with an ID of " + DATA[2] + "." + Client.nextLine);
                 }
                 break;
             }
@@ -47,17 +47,17 @@ public class OfferValidation extends Thread {
                      * Two reasons why offers fail.
                      * Wrong info provided, or user is not registered.
                      */
-                    if (DATA[2].equals(DefaultHelper.OFFER_FAILED_0))
-                    {
-                        System.out.println("Offer failed, wrong information provided.");
-                    }
                     if (DATA[2].equals(DefaultHelper.OFFER_FAILED_1))
                     {
-                        System.out.println("Offer failed, you are not registered.");
+                        Client.textArea.append("Offer failed, wrong information provided." + Client.nextLine);
+                    }
+                    if (DATA[2].equals(DefaultHelper.OFFER_FAILED_0))
+                    {
+                        Client.textArea.append("Offer failed, you are not registered." + Client.nextLine);
                     }
                     if (DATA[2].equals(DefaultHelper.OFFER_FAILED_2))
                     {
-                        System.out.println("Offer failed, you've exceeded your item limit.");
+                        Client.textArea.append("Offer failed, you've exceeded your item limit." + Client.nextLine);
                     }
                 }
                 break;

@@ -14,24 +14,27 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+/**
+ * This class concerns everything to do with registering on the server.
+ */
 public class RegisterValidation extends Thread {
 
-    static String REC_DATA, REQUEST, NAME, DESC, IP, S_PORT, MESSAGE;
-    static String[] DATA;
-    static int PORT, ID;
+    private String REC_DATA, REQUEST, NAME, DESC, IP, S_PORT, MESSAGE;
+    private String[] DATA;
+    private int PORT, ID;
 
-    static InetAddress CLIENT_ADDRESS;
-    static DatagramSocket SOCKET;
-    static DatagramPacket PACKET;
+    private InetAddress CLIENT_ADDRESS;
+    private DatagramSocket SOCKET;
+    private DatagramPacket PACKET;
 
-    static Users USER;
-    static ArrayList<Users> USERS;
-    static ArrayList<Items> ITEMS;
+    private Users USER;
+    private ArrayList<Users> USERS;
+    private ArrayList<Items> ITEMS;
 
-    static File USER_DATA;
-    static PrintWriter OUT;
+    private File USER_DATA;
+    private PrintWriter OUT;
 
-    static String P = "/";
+    private String P = "/";
 
     public RegisterValidation(String rd, DatagramSocket socket, DatagramPacket packet, ArrayList<Users> users, ArrayList<Items> items)
     {
@@ -42,42 +45,42 @@ public class RegisterValidation extends Thread {
         ITEMS = items;
     }
 
-    private boolean user_exists(String name)
-    {
-        Users tmp_user;
-        for (int i = 0; i < USERS.size(); i++)
-        {
-            tmp_user = USERS.get(i);
-            String tmp_name = tmp_user.get_name();
-            if (tmp_name.equals(name))
-                return true;
-        }
-        return false;
-    }
-
+    /**
+     * We send a message back to the client when they have successfully registered on the server.
+     */
     private void reg_success()
     {
         MESSAGE = SendHelper.create_send_reg(DefaultHelper.REGISTER, REQUEST, USER.get_name(), USER.get_IP().getHostAddress(), PORT);
         SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
+    /**
+     * We send an error back to the client when there is an error with registering.
+     */
     private void reg_error(int code)
     {
         MESSAGE = SendHelper.create_send_notReg(DefaultHelper.REGISTER_ERROR, REQUEST, code);
         SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
     }
 
+    /**
+     * Once a user is registered successfully, they are sent a list of items that a currently for sale on the server.
+     */
     private void send_all_items()
     {
         Items tmp_item;
         for (int i = 0; i < ITEMS.size(); i++)
         {
             tmp_item = ITEMS.get(i);
-            MESSAGE = SendHelper.create_send_existing_items(DefaultHelper.ITEM_LIST, ID, DESC, tmp_item.get_highest_bid());
+            String new_desc = tmp_item.get_name() + ": " + DESC;
+            MESSAGE = SendHelper.create_send_existing_items(DefaultHelper.ITEM_LIST, ID, new_desc, tmp_item.get_highest_bid());
             SendHelper.send(MESSAGE, PACKET.getAddress(), PACKET.getPort(), SOCKET);
         }
     }
 
+    /**
+     * User backup is updated when a user is registered.
+     */
     private synchronized void write_to_file() throws IOException
     {
         USER_DATA = new File("user_data.txt");
@@ -86,6 +89,10 @@ public class RegisterValidation extends Thread {
         OUT.close();
     }
 
+    /**
+     * The thread runs from here.
+     * Errors are outlined by system message lines.
+     */
     @Override
     public void run()
     {
@@ -118,11 +125,23 @@ public class RegisterValidation extends Thread {
                 return;
             }
 
-            USER = new Users(NAME, CLIENT_ADDRESS, PORT, 0);
+            USER = new Users(NAME, PACKET.getAddress(), PACKET.getPort(), 0);
 
-            if (!user_exists(NAME))
+            //first we have to check if the user exists already
+            boolean exists = false;
+            for (int i = 0; i < USERS.size(); i++)
             {
-                USERS.add(USER);
+                if (USER == USERS.get(i))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+
+            //if the user doesnt exist then we can add them to the server
+            if (!exists)
+            {
+                USERS.add(new Users(USER));
                 reg_success();
                 send_all_items();
                 try

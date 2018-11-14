@@ -27,8 +27,8 @@ public class ItemsValidation extends Thread {
              */
             case 0:
             {
-                System.out.println("New item added to the auction!");
-                System.out.println("ID: " + DATA[1] + " - Description: " + DATA[2]);
+                Client.textArea.append("New item added to the auction!" + Client.nextLine);
+                Client.textArea.append("ID: " + DATA[1] + " - " + DATA[2] + " for " + DATA[3] + "$" + Client.nextLine);
                 break;
             }
             /**
@@ -37,7 +37,7 @@ public class ItemsValidation extends Thread {
              */
             case 1:
             {
-                System.out.println("New highest bid of " + DATA[2] + "$ on item #" + DATA[1]);
+                Client.textArea.append("New highest bid of " + DATA[2] + "$ on item #" + DATA[1] + Client.nextLine);
                 break;
             }
             /**
@@ -46,7 +46,7 @@ public class ItemsValidation extends Thread {
              */
             case 2:
             {
-                System.out.println("Congratulations, you won item #" + DATA[1] + " for " + DATA[5] + "$.");
+                Client.textArea.append("Congratulations, you won item #" + DATA[1] + " for " + DATA[4] + "$." + Client.nextLine);
                 break;
             }
             /**
@@ -56,7 +56,7 @@ public class ItemsValidation extends Thread {
              */
             case 3:
             {
-                System.out.println("The bidding period for item #" + DATA[1] + " is over!");
+                Client.textArea.append("The bidding period for item #" + DATA[1] + " is over!" + Client.nextLine);
                 break;
             }
             /**
@@ -65,7 +65,7 @@ public class ItemsValidation extends Thread {
              */
             case 4:
             {
-                System.out.println("Your item #" + DATA[1] + " has been sold to " + DATA[2] + " for " + DATA[5] + "$.");
+                Client.textArea.append("Your item #" + DATA[1] + " has been sold to " + DATA[2] + " for " + DATA[5] + "$." + Client.nextLine);
                 break;
             }
             /**
@@ -74,7 +74,13 @@ public class ItemsValidation extends Thread {
              */
             case 5:
             {
-                System.out.println("You item #" + DATA[1] + " has not been sold. Maybe don't overprice it next time.");
+                Client.textArea.append("You item #" + DATA[1] + " has not been sold. Maybe don't overprice it next time." + Client.nextLine);
+                break;
+            }
+            case 6:
+            {
+                Client.textArea.append("Items currently up for auction: " + Client.nextLine);
+                Client.textArea.append("ID #" + DATA[1] + " " + DATA[2] + " offered for: " + DATA[3] + "$." + Client.nextLine);
                 break;
             }
         }

@@ -38,24 +38,32 @@ public class BidValidation extends Thread{
                      */
                     if (DATA[2].equals(DefaultHelper.BID_FAILED_0))
                     {
-                        System.out.println("Bid failed, wrong information provided.");
+                        Client.textArea.append("Bid failed, that item is no longer available or does not exist." + Client.nextLine);
                     }
-                    if (DATA[2].equals(DefaultHelper.BID_FAILED_1))
+                    else if (DATA[2].equals(DefaultHelper.BID_FAILED_1))
                     {
-                        System.out.println("Bid failed, you are not registered.");
+                        Client.textArea.append("Bid failed, you are not registered." + Client.nextLine);
                     }
-                    if (DATA[2].equals(DefaultHelper.BID_FAILED_2))
+                    else if (DATA[2].equals(DefaultHelper.BID_FAILED_2))
                     {
-                        System.out.println("Bid failed, that item is no longer available or does not exist.");
+                        Client.textArea.append("Bid failed, invalid information provided." + Client.nextLine);
                     }
-                    if (DATA[2].equals(DefaultHelper.BID_FAILED_3))
+                    else if (DATA[2].equals(DefaultHelper.BID_FAILED_3))
                     {
-                        System.out.println("Bid failed, your bid is too low. Consider selling your car for more funds.");
+                        Client.textArea.append("Bid failed, your bid is too low. Consider selling your car for more funds." + Client.nextLine);
                     }
-                    if (DATA[2].equals(DefaultHelper.BID_FAILED_4))
+                    else if (DATA[2].equals(DefaultHelper.BID_FAILED_4))
                     {
-                        System.out.println("Bid failed, you can't bid on your own item. You're not fooling anybody.");
+                        Client.textArea.append("Bid failed, you can't bid on your own item. You're not fooling anybody." + Client.nextLine);
                     }
+                }
+                break;
+            }
+            case 1:
+            {
+                if (DATA[1].equals(REQUEST))
+                {
+                    Client.textArea.append("Your bid was successful!" + Client.nextLine);
                 }
                 break;
             }

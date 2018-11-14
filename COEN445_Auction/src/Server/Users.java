@@ -7,12 +7,17 @@ package Server;
 
 import java.net.InetAddress;
 
+/**
+ * This is our users information...
+ * Each user has their own unique name, ip, port.
+ * Users also have a value associated to the number of items they currently have for sale.
+ */
 public class Users {
 
-    static String NAME;
-    static InetAddress IP_ADDRESS;
-    static int PORT;
-    static int NUMBER_OF_ITEMS = 0;
+    private String NAME;
+    private InetAddress IP_ADDRESS;
+    private int PORT;
+    private int NUMBER_OF_ITEMS;
 
     public Users(String n, InetAddress ip, int port, int number_of_items)
     {
@@ -20,6 +25,11 @@ public class Users {
         IP_ADDRESS = ip;
         PORT = port;
         NUMBER_OF_ITEMS = number_of_items;
+    }
+
+    public Users(Users user)
+    {
+        this(user.get_name(), user.get_IP(), user.get_port(), user.get_num_for_sale());
     }
 
     public String get_name()

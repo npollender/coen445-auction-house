@@ -5,24 +5,31 @@
 
 package Client;
 
+import javax.swing.*;
+import javax.swing.text.DefaultCaret;
+import java.awt.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Client {
 
-    static int PORT, CODE, ID;
+    static int PORT, ID;
     static InetAddress SERVER_ADDRESS, IP_ADDRESS;
     static DatagramSocket SOCKET;
     static DatagramPacket PACKET;
-    static String SERVER, NAME, REQUEST, IP, DESC, MIN, ITEM, ITEM_NAME, BID;
-    //static ArrayList<Items> ITEMS = new ArrayList<Items>();
+    static String SERVER, NAME, REQUEST, IP, ITEM, DESC, MIN, ITEM_NAME, BID;
     static boolean IS_REGISTERED;
     static boolean EXIT = false;
+    static String nextLine = "\n";
+
+    static JFrame jFrame;
+    static JTextArea textArea;
+    static JScrollPane scrollPane;
+    static DefaultCaret caret;
 
     public Client() {}
 
@@ -34,7 +41,7 @@ public class Client {
             System.out.print("Enter desired username: ");
             NAME = input.nextLine();
             REQUEST = NAME;
-            new Thread(new SendRegister()).start();
+            new Thread(new SendAction(0)).start();
         }
         else
         {
@@ -47,7 +54,7 @@ public class Client {
         if (!IS_REGISTERED)
             System.out.println("You need to be registered to de-register...");
         else
-            new Thread(new SendDeregister()).start();
+            new Thread(new SendAction(1)).start();
     }
 
     private static void userOffer()
@@ -65,7 +72,7 @@ public class Client {
             if (!onlyContainsNumbers(MIN) || MIN.length() <= 0)
                 System.out.println("Invalid starting bid entered.");
             else
-                new Thread(new SendOffer()).start();
+                new Thread(new SendAction(2)).start();
         }
         else
         {
@@ -73,24 +80,26 @@ public class Client {
         }
     }
 
-    private void userBidCheck()
+    private static void userBid()
     {
-        if (!IS_REGISTERED)
-            System.out.println("You need to be registered to bid on an item...");
-    }
+        if (IS_REGISTERED)
+        {
+            Scanner input = new Scanner(System.in);
+            System.out.print("Enter item id to bid on: ");
+            ITEM = input.nextLine();
+            ID = Integer.parseInt(ITEM);
+            System.out.print("Enter bid: ");
+            BID = input.nextLine();
 
-    private void userBid()
-    {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter item name to bid on: ");
-        ITEM = input.nextLine();
-        System.out.println("Enter bid: ");
-        BID = input.nextLine();
-
-        if(!onlyContainsNumbers(BID) || BID.length() <= 0)
-            System.out.println("Invalid bid entered.");
+            if (!onlyContainsNumbers(BID) || BID.length() <= 0)
+                System.out.println("Invalid bid entered.");
+            else
+                new Thread(new SendAction(3)).start();
+        }
         else
-            new Thread(new SendBid()).start();
+        {
+            System.out.println("you must be registered to offer");
+        }
     }
 
     private static boolean onlyContainsNumbers(String s)
@@ -106,7 +115,7 @@ public class Client {
         }
     }
 
-    public void joke()
+    public static void joke()
     {
         System.out.println("A programming language walks into a bar and says 'Hello world!'");
     }
@@ -120,10 +129,21 @@ public class Client {
         catch (InterruptedException e) {}
     }
 
-    public void addFunds()
+    public static void initOutput()
     {
-        System.out.println("Adding funds...");
-        System.out.println("You have successfully mortgaged your home! You now have a bunch of imaginary money!");
+        jFrame = new JFrame();
+        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        textArea = new JTextArea(5, 20);
+        textArea.setEditable(false);
+        caret = (DefaultCaret)textArea.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        scrollPane = new JScrollPane(textArea);
+
+        jFrame.add(new JLabel("Auction House"), BorderLayout.NORTH);
+        jFrame.add(scrollPane);
+        jFrame.pack();
+        jFrame.setVisible(true);
+        jFrame.setSize(800,400);
     }
 
     public static void main(String args[]) throws IOException
@@ -136,7 +156,8 @@ public class Client {
         IP = IP_ADDRESS.getHostAddress();
         Scanner input = new Scanner(System.in);
         String command = "";
-        int counter = 0;
+
+        initOutput();
 
         Thread listen = new Thread(() -> {
             while (true)
@@ -156,7 +177,7 @@ public class Client {
             }
         });
 /*
-        System.out.println("Welcome to TOTALLY NOT FAKE AUCTION HOUSE");
+        System.out.println("Welcome to TOTALLY NOT FAKE AUCTION HOUSE - TEST BUILD");
         System.out.println("We're just going to take care of a few things for you...");
         System.out.println("********************************************************");
         System.out.println("Adding funds to your session...");
@@ -170,7 +191,8 @@ public class Client {
         System.out.println("Stealing your credit card information...");
         HOLDUP(5);
         System.out.println("Alright, we're all set! Good luck!");
-        HOLDUP(30);
+        System.out.println("Use command HELP for a list of commands.");
+        System.out.println("********************************************************");
 */
 
         listen.start();
@@ -195,16 +217,29 @@ public class Client {
             {
                 EXIT = true;
             }
-
+            else if(command.equals("bid"))
+            {
+                userBid();
+            }
+            else if(command.equals("joke"))
+            {
+                joke();
+            }
+            else if(command.equals("HELP") || command.equals("help"))
+            {
+                System.out.println("List of commands (case sensitive):");
+                System.out.println("register - register to the server");
+                System.out.println("deregister - deregister from the server");
+                System.out.println("offer - offer an item");
+                System.out.println("bid - bid on an item");
+                System.out.println("joke - probably just a bad joke, I wouldn't bother trying this one.");
+                System.out.println("exit - kills the client, may cause errors when trying to reconnect to the server.");
+            }
+            else
+            {
+                System.out.println("Please enter a valid command! Use HELP for a list of commands.");
+            }
         }
-
-        listen.stop();
-
-        /**
-         * We need to add a way to call methods.
-         *
-         * These should be added inside the loop, so we are always looking for an
-         * input from the user.
-         */
+        System.exit(0);
     }
 }

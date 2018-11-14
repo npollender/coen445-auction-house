@@ -8,7 +8,7 @@ package Client;
 public class DefaultHelper {
 
     static int PORT = 42069;
-    static String SERVER = "127.0.0.1";
+    static String SERVER = "192.168.1.116";
     static int MSG_SIZE = 300;
 
     /**
@@ -33,6 +33,7 @@ public class DefaultHelper {
     static String DEREG_FAILED_1 = "1";
     static String DEREG_FAILED_2 = "2";
     static String DEREG_FAILED_3 = "3";
+    static String DEREG_FAILED_4 = "4";
 
     /**
      * Offer error id's
