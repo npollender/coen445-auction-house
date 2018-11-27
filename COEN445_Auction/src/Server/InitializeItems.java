@@ -15,9 +15,9 @@ import java.util.Timer;
  */
 public class InitializeItems {
 
-    private String ID, NAME, DESC, MIN, S_OWNER, S_HI_BIDDER, TIME_REM;
+    private String ID, NAME, DESC, MIN, S_OWNER, S_HI_BIDDER, S_PORT;
     private String[] DATA;
-    private int ITEM_ID, MIN_BID;
+    private int ITEM_ID, MIN_BID, PORT;
 
     private Users USER, OWNER, HI_BIDDER;
     private Items ITEM;
@@ -68,9 +68,10 @@ public class InitializeItems {
                         MIN = DATA[3];
                         S_OWNER = DATA[4];
                         S_HI_BIDDER = DATA[5];
-                        TIME_REM = DATA[6];
+                        S_PORT = DATA[6];
                         ITEM_ID = Integer.parseInt(ID);
                         MIN_BID = Integer.parseInt(MIN);
+                        PORT = Integer.parseInt(S_PORT);
 
                         for (int i = 0; i < USERS.size(); i++) {
                             USER = USERS.get(i);
@@ -82,7 +83,7 @@ public class InitializeItems {
                             }
                         }
 
-                        ITEM = new Items(ITEM_ID, SOCKET, OWNER, HI_BIDDER, NAME, DESC, MIN_BID, USERS);
+                        ITEM = new Items(ITEM_ID, SOCKET, OWNER, HI_BIDDER, NAME, DESC, MIN_BID, USERS, PORT);
                         ITEMS.add(ITEM);
                         DefaultHelper.ITEM_ID = ITEM_ID;
 

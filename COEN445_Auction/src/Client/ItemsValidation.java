@@ -5,6 +5,8 @@
 
 package Client;
 
+import java.io.IOException;
+
 public class ItemsValidation extends Thread {
 
     static String[] DATA;
@@ -29,6 +31,7 @@ public class ItemsValidation extends Thread {
             {
                 Client.textArea.append("New item added to the auction!" + Client.nextLine);
                 Client.textArea.append("ID: " + DATA[1] + " - " + DATA[2] + " for " + DATA[3] + "$" + Client.nextLine);
+                Client.textArea.append("To bid on the item, first connect to port #" + DATA[4] + Client.nextLine);
                 break;
             }
             /**
@@ -57,6 +60,13 @@ public class ItemsValidation extends Thread {
             case 3:
             {
                 Client.textArea.append("The bidding period for item #" + DATA[1] + " is over!" + Client.nextLine);
+                try
+                {
+                    TCPClient.SOCKET.close();
+                    Client.textArea.append("All TCP connections associated to the item have been closed.");
+                    Client.IS_TCP = false;
+                }
+                catch (IOException e) {}
                 break;
             }
             /**

@@ -41,6 +41,12 @@ public class SendAction extends Thread {
                 SendHelper.send(MESSAGE);
                 break;
             }
+            case 4:
+            {
+                MESSAGE = SendHelper.create_ack(4, Client.NAME, Client.ITEM_PORT);
+                SendHelper.send(MESSAGE);
+                break;
+            }
         }
     }
 }

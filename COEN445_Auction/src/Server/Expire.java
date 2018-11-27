@@ -59,7 +59,7 @@ public class Expire extends TimerTask {
             //we find the highest bidder to tell them they won
             if (tmp_user.equals(item.get_highest_bidder()))
             {
-                HOLDUP(1);
+                HOLDUP(250);
                 MESSAGE = SendHelper.create_send_win(DefaultHelper.BID_WINNER, item.get_item_id(), item.get_owner().get_IP().getHostAddress(), item.get_owner().get_port(), item.get_highest_bid());
                 SendHelper.send(MESSAGE, tmp_user.get_IP(), tmp_user.get_port(), SOCKET);
             }
@@ -67,7 +67,7 @@ public class Expire extends TimerTask {
             //we find the owner to tell them their item has been sold
             else if (tmp_user.equals(item.get_owner()))
             {
-                HOLDUP(1);
+                HOLDUP(250);
                 MESSAGE = SendHelper.create_send_sold_to(DefaultHelper.BID_SOLD_TO, item.get_item_id(), item.get_highest_bidder().get_name(), item.get_highest_bidder().get_IP().getHostAddress(), item.get_highest_bidder().get_port(), item.get_highest_bid());
                 SendHelper.send(MESSAGE, tmp_user.get_IP(), tmp_user.get_port(), SOCKET);
             }
@@ -161,7 +161,7 @@ public class Expire extends TimerTask {
     {
         try
         {
-            TimeUnit.SECONDS.sleep(time);
+            TimeUnit.MILLISECONDS.sleep(time);
         }
         catch (InterruptedException e) {}
     }
@@ -217,8 +217,10 @@ public class Expire extends TimerTask {
                         }
                     }
                     //the item is removed and the clients are notified of the bid period being over. The owner is notified the item is sold and the winner is notified they won.
+                    tmp_item.get_socket().close();
                     ITEMS.remove(tmp_item);
                     bid_over(tmp_item);
+                    TCPServer.Close(tmp_item.get_port());
                     try
                     {
                         update_user_file(tmp_item.get_owner());

@@ -18,6 +18,7 @@ public class DefaultHelper {
     static int DEREG = 1;
     static int OFFER = 2;
     static int BID = 3;
+    static int ACK = 4;
 
     /**
      * Registration error id's

@@ -77,6 +77,20 @@ public class SendHelper {
         return msg;
     }
 
+    synchronized static String create_send_ack_fail(int c)
+    {
+        String sc = Integer.toString(c);
+        String msg = sc + P;
+        return msg;
+    }
+
+    synchronized static String create_send_ack(int c)
+    {
+        String sc = Integer.toString(c);
+        String msg = sc + P;
+        return msg;
+    }
+
     /**
      * Sends client message that bid succeeded.
      */

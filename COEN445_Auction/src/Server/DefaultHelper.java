@@ -60,6 +60,8 @@ public class DefaultHelper {
     static int BID_SOLD_TO = 12;
     static int BID_WINNER = 13;
     static int BID_NOT_SOLD = 14;
+    static int ACK = 15;
+    static int ACK_ERROR = 16;
 
     /**
      * These codes are for errors related to registering.

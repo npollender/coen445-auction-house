@@ -6,8 +6,7 @@
 package Server;
 
 import java.io.*;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
@@ -21,7 +20,7 @@ public class OfferValidation implements Runnable {
 
     private String REC_DATA, REQUEST, C_NAME, NAME, DESC, MESSAGE, S_MIN;
     private String[] DATA;
-    private int MIN;
+    private int MIN, PORT;
 
     private DatagramSocket SOCKET;
     private DatagramPacket PACKET;
@@ -77,14 +76,14 @@ public class OfferValidation implements Runnable {
     /**
      * All registered clients are notified when a new item is offered.
      */
-    private void broadcast_item()
+    private void broadcast_item(int port)
     {
         Users tmp_user;
         for (int i = 0; i < USERS.size(); i++)
         {
             tmp_user = USERS.get(i);
             String new_desc = NAME + ": " + DESC;
-            MESSAGE = SendHelper.create_send_new_item(DefaultHelper.OFFER_BROADCAST, DefaultHelper.ITEM_ID, new_desc, MIN, tmp_user.get_port());
+            MESSAGE = SendHelper.create_send_new_item(DefaultHelper.OFFER_BROADCAST, DefaultHelper.ITEM_ID, new_desc, MIN, port);
             SendHelper.send(MESSAGE, tmp_user.get_IP(), tmp_user.get_port(), SOCKET);
         }
     }
@@ -160,6 +159,16 @@ public class OfferValidation implements Runnable {
         tmp.renameTo(USER_DATA);
     }
 
+    private int generate_port() throws IOException
+    {
+        int port;
+        ServerSocket item_socket = new ServerSocket(0);
+        item_socket.setReuseAddress(true);
+        port = item_socket.getLocalPort();
+        item_socket.close();
+        return port;
+    }
+
     /**
      * Messages have been arriving too quickly at the clients so we must put a delay between sending messages.
      */
@@ -208,9 +217,21 @@ public class OfferValidation implements Runnable {
                 if (USER.get_num_for_sale() < DefaultHelper.MAX_ITEMS_FOR_SALE)
                 {
                     DefaultHelper.ITEM_ID += 1;
-                    ITEM = new Items(DefaultHelper.ITEM_ID, SOCKET, USER, USER, NAME, DESC, MIN, USERS);
+                    try
+                    {
+                        PORT = generate_port();
+                    }
+                    catch (IOException e)
+                    {
+                        System.out.println("Something went wrong with setting up the item port...");
+                        offer_error(DefaultHelper.OFFER_ERROR_1);
+                        System.out.println("Item: " + NAME + " / Error: invalid info provided.");
+                        return;
+                    }
+                    ITEM = new Items(DefaultHelper.ITEM_ID, SOCKET, USER, USER, NAME, DESC, MIN, USERS, PORT);
                     System.out.println("Item: " + NAME + " offered for " + MIN + "$.");
                     ITEMS.add(ITEM);
+
                     //we increment the users items for sale (max of 3)
                     for (int i = 0; i < USERS.size(); i++)
                     {
@@ -224,7 +245,7 @@ public class OfferValidation implements Runnable {
                     //send the messages to the clients and update the backups
                     offer_success();
                     HOLDUP(250);
-                    broadcast_item();
+                    broadcast_item(PORT);
                     try
                     {
                         write_to_file();
@@ -232,6 +253,7 @@ public class OfferValidation implements Runnable {
                     }
                     catch (IOException e) {}
                     start_bid();
+                    new Thread(new TCPServer(PORT)).start();
                 }
                 else
                 {

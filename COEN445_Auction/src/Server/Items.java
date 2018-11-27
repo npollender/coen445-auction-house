@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class Items {
 
     private String NAME, DESC, MESSAGE;
-    private int ID, HI_BID;
+    private int ID, HI_BID, PORT;
     private Users OWNER, HI_BIDDER;
     private ArrayList<Users> USERS;
     private DatagramSocket SOCKET;
@@ -30,7 +30,7 @@ public class Items {
 
     private String P = "/";
 
-    public Items(int id, DatagramSocket socket, Users owner, Users hi_bidder, String n, String desc, int hi_bid, ArrayList<Users> users)
+    public Items(int id, DatagramSocket socket, Users owner, Users hi_bidder, String n, String desc, int hi_bid, ArrayList<Users> users, int port)
     {
         ID = id;
         SOCKET= socket;
@@ -40,6 +40,12 @@ public class Items {
         DESC = desc;
         HI_BID = hi_bid;
         USERS = users;
+        PORT = port;
+    }
+
+    public DatagramSocket get_socket()
+    {
+        return SOCKET;
     }
 
     public String get_name()
@@ -70,6 +76,11 @@ public class Items {
     public int get_item_id()
     {
         return ID;
+    }
+
+    public int get_port()
+    {
+        return PORT;
     }
 
     public void set_new_hi_bidder(Users bidder)
@@ -162,7 +173,7 @@ public class Items {
     {
         try
         {
-            TimeUnit.SECONDS.sleep(time);
+            TimeUnit.MILLISECONDS.sleep(time);
         }
         catch (InterruptedException e) {}
     }
@@ -195,7 +206,7 @@ public class Items {
                 }*/
                 //bid was successful so we notify the user and all clients.
                 bid_success(request, bidder);
-                HOLDUP(1);
+                HOLDUP(250);
                 broadcast_bid();
                 try
                 {

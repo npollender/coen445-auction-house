@@ -116,6 +116,16 @@ public class DataValidation implements Runnable {
                     new ItemsValidation(5, DATA).start();
                     break;
                 }
+                case 15:
+                {
+                    new AckValidation(0, DATA).start();
+                    break;
+                }
+                case 16:
+                {
+                    new AckValidation(1, DATA).start();
+                    break;
+                }
                 default:
                 {
                     Client.textArea.append("Looks like something went wrong with the server... Sorry!");

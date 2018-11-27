@@ -17,12 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Client {
 
-    static int PORT, ID;
+    static int PORT, ITEM_PORT, ID;
     static InetAddress SERVER_ADDRESS, IP_ADDRESS;
     static DatagramSocket SOCKET;
     static DatagramPacket PACKET;
-    static String SERVER, NAME, REQUEST, IP, ITEM, DESC, MIN, ITEM_NAME, BID;
-    static boolean IS_REGISTERED;
+    static String SERVER, NAME, REQUEST, IP, ITEM, DESC, MIN, ITEM_NAME, BID, S_PORT;
+    static boolean IS_REGISTERED, IS_TCP;
     static boolean EXIT = false;
     static String nextLine = "\n";
 
@@ -80,9 +80,29 @@ public class Client {
         }
     }
 
-    private static void userBid()
+    private static void TCP_connect()
     {
         if (IS_REGISTERED)
+        {
+            Scanner input = new Scanner(System.in);
+            System.out.print("Enter port to connect to: ");
+            S_PORT = input.nextLine();
+            ITEM_PORT = Integer.parseInt(S_PORT);
+
+            if (!onlyContainsNumbers(S_PORT) || S_PORT.length() <= 0)
+                System.out.println("Invalid port entered.");
+            else
+                new Thread(new SendAction(4)).start();
+        }
+        else
+        {
+            System.out.println("you must be registered to make a tcp connection.");
+        }
+    }
+
+    private static void userBid()
+    {
+        if (IS_REGISTERED && IS_TCP)
         {
             Scanner input = new Scanner(System.in);
             System.out.print("Enter item id to bid on: ");
@@ -96,9 +116,13 @@ public class Client {
             else
                 new Thread(new SendAction(3)).start();
         }
+        else if (!IS_REGISTERED)
+        {
+            System.out.println("you must be registered to offer.");
+        }
         else
         {
-            System.out.println("you must be registered to offer");
+            System.out.println("you must establish a tcp connection before bidding.");
         }
     }
 
@@ -187,7 +211,7 @@ public class Client {
         System.out.println("Selling all your belongings...");
         HOLDUP(5);
         System.out.println("Emptying your savings account...");
-        HOLDUP(5);
+        HOLDUP(5);1
         System.out.println("Stealing your credit card information...");
         HOLDUP(5);
         System.out.println("Alright, we're all set! Good luck!");
@@ -217,20 +241,25 @@ public class Client {
             {
                 EXIT = true;
             }
-            else if(command.equals("bid"))
+            else if (command.equals("bid"))
             {
                 userBid();
             }
-            else if(command.equals("joke"))
+            else if (command.equals("connect"))
+            {
+                TCP_connect();
+            }
+            else if (command.equals("joke"))
             {
                 joke();
             }
-            else if(command.equals("HELP") || command.equals("help"))
+            else if (command.equals("HELP") || command.equals("help"))
             {
                 System.out.println("List of commands (case sensitive):");
                 System.out.println("register - register to the server");
                 System.out.println("deregister - deregister from the server");
                 System.out.println("offer - offer an item");
+                System.out.println("connect - create tcp connection to an item");
                 System.out.println("bid - bid on an item");
                 System.out.println("joke - probably just a bad joke, I wouldn't bother trying this one.");
                 System.out.println("exit - kills the client, may cause errors when trying to reconnect to the server.");

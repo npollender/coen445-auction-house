@@ -77,6 +77,12 @@ public class DataValidation implements Runnable {
                     new Thread(new BidValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
                     break;
                 }
+
+                case 4:
+                {
+                    new Thread(new AckValidation(REC_DATA, SOCKET, PACKET, USERS, ITEMS)).start();
+                    break;
+                }
                 default:
                 {
                     System.out.println("Something went wrong with the client that sent this message... Sorry!");

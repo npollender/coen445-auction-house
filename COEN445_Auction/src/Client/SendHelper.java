@@ -50,8 +50,17 @@ public class SendHelper {
     }
 
     /**
+     * Create a tcp connection
+     */
+    synchronized static String create_ack(int c, String name, int port)
+    {
+        String msg = c + P + name + P + port + P;
+        return msg;
+    }
+
+    /**
      * Bid request to the server
-     * TCP CONNECTION
+     * TCP CONNECTION REQUIRED
      */
     synchronized static String create_send_bid(int c, String request, int id, String bid)
     {
